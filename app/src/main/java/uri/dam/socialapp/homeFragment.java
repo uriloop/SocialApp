@@ -4,7 +4,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,12 +25,15 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.io.File;
+import java.util.Objects;
+
 
 public class homeFragment extends Fragment {
 
 
     NavController navController;
-
+    public AppViewModel appViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,6 +46,7 @@ public class homeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
 
 
@@ -65,6 +71,8 @@ public class homeFragment extends Fragment {
 
         postsRecyclerView.setAdapter(new PostsAdapter(options));
 
+        appViewModel = new
+                ViewModelProvider(requireActivity()).get(AppViewModel.class);
 
 
     }
@@ -97,16 +105,33 @@ public class homeFragment extends Fragment {
                         .update("likes."+uid, post.likes.containsKey(uid) ?
                                 FieldValue.delete() : true);
             });
+
+            if (post.mediaUrl != null) {
+                holder.mediaImageView.setVisibility(View.VISIBLE);
+                if ("audio".equals(post.mediaType)) {
+                    Glide.with(requireView()).load(R.drawable.audio).centerCrop().into(holder.mediaImageView);
+                } else {
+                    Glide.with(requireView()).load(post.mediaUrl).centerCrop().into(holder.mediaImageView);
+                }
+                holder.mediaImageView.setOnClickListener(view -> {
+                    appViewModel.postSeleccionado.setValue(post);
+                    navController.navigate(R.id.mediaFragment);
+                });
+            } else {
+                holder.mediaImageView.setVisibility(View.GONE);
+            }
+
         }
 
         class PostViewHolder extends RecyclerView.ViewHolder {
-            ImageView authorPhotoImageView,likeImageView;
+            ImageView authorPhotoImageView,likeImageView,mediaImageView;
             TextView authorTextView, contentTextView,numLikesTextView;
 
             PostViewHolder(@NonNull View itemView) {
                 super(itemView);
                 likeImageView = itemView.findViewById(R.id.likeImageView);
                 authorPhotoImageView = itemView.findViewById(R.id.photoImageView);
+                mediaImageView = itemView.findViewById(R.id.mediaImage);
                 authorTextView = itemView.findViewById(R.id.authorTextView);
                 contentTextView = itemView.findViewById(R.id.contentTextView);
                 numLikesTextView = itemView.findViewById(R.id.numLikesTextView);

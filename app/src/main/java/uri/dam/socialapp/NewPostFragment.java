@@ -31,9 +31,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
+import java.util.UUID;
 
 
 public class NewPostFragment extends Fragment {
@@ -148,28 +151,42 @@ public class NewPostFragment extends Fragment {
 
     private void publicar() {
         String postContent = postConentEditText.getText().toString();
-
         if(TextUtils.isEmpty(postContent)){
             postConentEditText.setError("Required");
             return;
         }
-
         publishButton.setEnabled(false);
-
-        guardarEnFirestore(postContent);
+        if (mediaTipo == null) {
+            guardarEnFirestore(postContent, null);
+        }
+        else
+        {
+            pujaIguardarEnFirestore(postContent);
+        }
     }
-    private void guardarEnFirestore(String postContent) {
+    private void guardarEnFirestore(String postContent, String mediaUrl) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        Post post = new Post(user.getUid(), (user.getDisplayName() != user.getEmail() ? user.getDisplayName() : null), (user.getPhotoUrl().toString() != null ? user.getPhotoUrl().toString() : null), postContent,mediaTipo,mediaUri.toString());
-
+        Post post = new Post(user.getUid(), user.getDisplayName(),
+                (user.getPhotoUrl() != null ? user.getPhotoUrl().toString() :
+                        "R.drawable.user"), postContent, mediaUrl, mediaTipo);
         FirebaseFirestore.getInstance().collection("posts")
                 .add(post)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         navController.popBackStack();
+                        appViewModel.setMediaSeleccionado( null, null);
                     }
                 });
     }
+    private void pujaIguardarEnFirestore(final String postText) {
+        FirebaseStorage.getInstance().getReference(mediaTipo + "/" +
+                UUID.randomUUID())
+                .putFile(mediaUri)
+                .continueWithTask(task ->
+                        task.getResult().getStorage().getDownloadUrl())
+                .addOnSuccessListener(url -> guardarEnFirestore(postText,
+                        url.toString()));
+    }
+
 }

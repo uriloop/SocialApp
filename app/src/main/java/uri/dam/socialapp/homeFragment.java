@@ -62,7 +62,7 @@ public class homeFragment extends Fragment {
 
         RecyclerView postsRecyclerView = view.findViewById(R.id.postsRecyclerView);
 
-        Query query = FirebaseFirestore.getInstance().collection("posts").limit(50).orderBy("timestamp", Query.Direction.valueOf("DESCENDING"));
+        Query query = FirebaseFirestore.getInstance().collection("posts").limit(50).orderBy("timestamp");
 
         FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
                 .setQuery(query, Post.class)
@@ -135,6 +135,7 @@ public class homeFragment extends Fragment {
                 authorTextView = itemView.findViewById(R.id.authorTextView);
                 contentTextView = itemView.findViewById(R.id.contentTextView);
                 numLikesTextView = itemView.findViewById(R.id.numLikesTextView);
+
             }
         }
     }

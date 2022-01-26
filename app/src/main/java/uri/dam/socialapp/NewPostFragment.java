@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,6 +46,7 @@ public class NewPostFragment extends Fragment {
 
     Button publishButton;
     EditText postConentEditText;
+
     public AppViewModel appViewModel;
     public Uri mediaUri;
     public String mediaTipo;
@@ -66,6 +68,7 @@ public class NewPostFragment extends Fragment {
         publishButton = view.findViewById(R.id.publishButton);
         postConentEditText = view.findViewById(R.id.postContentEditText);
 
+
         publishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,7 +77,6 @@ public class NewPostFragment extends Fragment {
         });
 
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
-
 
 
         view.findViewById(R.id.camara_fotos).setOnClickListener(v -> tomarFoto());
@@ -114,18 +116,22 @@ public class NewPostFragment extends Fragment {
                             "audio");
                 }
             });
+
     private void seleccionarImagen() {
         mediaTipo = "image";
         galeria.launch("image/*");
     }
+
     private void seleccionarVideo() {
         mediaTipo = "video";
         galeria.launch("video/*");
     }
+
     private void seleccionarAudio() {
         mediaTipo = "audio";
         galeria.launch("audio/*");
     }
+
     private void tomarFoto() {
         try {
             mediaUri = FileProvider.getUriForFile(requireContext(),
@@ -133,8 +139,10 @@ public class NewPostFragment extends Fragment {
                             ".jpg",
                             requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)));
             camaraFotos.launch(mediaUri);
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
     }
+
     private void tomarVideo() {
         try {
             mediaUri = FileProvider.getUriForFile(requireContext(),
@@ -142,8 +150,10 @@ public class NewPostFragment extends Fragment {
                             ".mp4",
                             requireContext().getExternalFilesDir(Environment.DIRECTORY_MOVIES)));
             camaraVideos.launch(mediaUri);
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
     }
+
     private void grabarAudio() {
         grabadoraAudio.launch(new
                 Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION));
@@ -151,19 +161,18 @@ public class NewPostFragment extends Fragment {
 
     private void publicar() {
         String postContent = postConentEditText.getText().toString();
-        if(TextUtils.isEmpty(postContent)){
+        if (TextUtils.isEmpty(postContent)) {
             postConentEditText.setError("Required");
             return;
         }
         publishButton.setEnabled(false);
         if (mediaTipo == null) {
             guardarEnFirestore(postContent, null);
-        }
-        else
-        {
+        } else {
             pujaIguardarEnFirestore(postContent);
         }
     }
+
     private void guardarEnFirestore(String postContent, String mediaUrl) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         Post post = new Post(user.getUid(), user.getDisplayName(),
@@ -175,16 +184,16 @@ public class NewPostFragment extends Fragment {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         navController.popBackStack();
-                        appViewModel.setMediaSeleccionado( null, null);
+                        appViewModel.setMediaSeleccionado(null, null);
                     }
                 });
     }
+
     private void pujaIguardarEnFirestore(final String postText) {
         FirebaseStorage.getInstance().getReference(mediaTipo + "/" +
                 UUID.randomUUID())
                 .putFile(mediaUri)
-                .continueWithTask(task ->
-                        task.getResult().getStorage().getDownloadUrl())
+                .continueWithTask(task -> task.getResult().getStorage().getDownloadUrl())
                 .addOnSuccessListener(url -> guardarEnFirestore(postText,
                         url.toString()));
     }

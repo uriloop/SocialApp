@@ -15,7 +15,7 @@ public class Post {
     public String content;
     public String mediaUrl;
     public String mediaType;
-    public Timestamp timestamp;
+    /*public Timestamp timestamp;*/
     public Map<String, Boolean> likes = new HashMap<>();
     // Constructor vacio requerido por Firestore
     public Post() {}
@@ -27,7 +27,7 @@ public class Post {
         this.content = content;
         this.mediaUrl = mediaUrl;
         this.mediaType = mediaType;
-        Date date= new Date();
-        this.timestamp=new Timestamp(date.getTime());
+       /* Long datetime = System.currentTimeMillis();
+        this.timestamp=new Timestamp(datetime);*/
     }
 }

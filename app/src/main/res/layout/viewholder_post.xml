@@ -16,8 +16,17 @@
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:clickable="false"
-            app:srcCompat="@drawable/user" />
+            android:clickable="true"
+            app:srcCompat="@drawable/user"
+            />
+        <!--<ImageView
+            android:id="@+id/message"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:clickable="true"
+            app:srcCompat="@android:drawable/ic_dialog_email"
+            />-->
 
         <LinearLayout
             android:layout_width="match_parent"

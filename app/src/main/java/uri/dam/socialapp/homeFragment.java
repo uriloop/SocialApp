@@ -1,5 +1,7 @@
 package uri.dam.socialapp;
 
+import android.content.Intent;
+import android.graphics.Matrix;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -110,6 +114,30 @@ public class homeFragment extends Fragment {
                         .document(postKey)
                         .update("likes."+uid, post.likes.containsKey(uid) ?
                                 FieldValue.delete() : true);
+            });
+
+
+
+            holder.authorPhotoImageView.setOnClickListener(new View.OnClickListener() {
+                boolean isImageFitToScreen = false;
+
+                @Override
+                public void onClick(View v) {
+                    if(isImageFitToScreen) {
+                        isImageFitToScreen =false;
+/*
+                        holder.authorPhotoImageView.jumpDrawablesToCurrentState();
+*/
+                        holder.authorPhotoImageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                        holder.authorPhotoImageView.setAdjustViewBounds(true);
+                    }else{
+                        isImageFitToScreen =true;
+                        holder.authorPhotoImageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                        holder.authorPhotoImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                        holder.authorPhotoImageView.setMaxHeight(500);
+
+                    }
+                }
             });
 
             if (post.mediaUrl != null) {

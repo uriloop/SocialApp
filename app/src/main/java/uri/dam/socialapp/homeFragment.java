@@ -26,6 +26,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 
@@ -62,7 +65,7 @@ public class homeFragment extends Fragment {
 
         RecyclerView postsRecyclerView = view.findViewById(R.id.postsRecyclerView);
 
-        Query query = FirebaseFirestore.getInstance().collection("posts").limit(50).orderBy("timestamp");
+        Query query = FirebaseFirestore.getInstance().collection("posts").limit(50);
 
         FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
                 .setQuery(query, Post.class)
@@ -91,6 +94,9 @@ public class homeFragment extends Fragment {
             Glide.with(getContext()).load(post.authorPhotoUrl).circleCrop().into(holder.authorPhotoImageView);
             holder.authorTextView.setText(post.author);
             holder.contentTextView.setText(post.content);
+
+            String currentDateAndTime= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(post.currentTime);
+            holder.dateTextView.setText(currentDateAndTime);
             // Gestion de likes
             final String postKey = getSnapshots().getSnapshot(position).getId();
             final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -125,7 +131,7 @@ public class homeFragment extends Fragment {
 
         class PostViewHolder extends RecyclerView.ViewHolder {
             ImageView authorPhotoImageView,likeImageView,mediaImageView;
-            TextView authorTextView, contentTextView,numLikesTextView;
+            TextView authorTextView, contentTextView,numLikesTextView, dateTextView;
 
             PostViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -135,6 +141,7 @@ public class homeFragment extends Fragment {
                 authorTextView = itemView.findViewById(R.id.authorTextView);
                 contentTextView = itemView.findViewById(R.id.contentTextView);
                 numLikesTextView = itemView.findViewById(R.id.numLikesTextView);
+                dateTextView= itemView.findViewById(R.id.date);
 
             }
         }

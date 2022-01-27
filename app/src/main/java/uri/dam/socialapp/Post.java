@@ -4,6 +4,7 @@ import android.widget.SimpleCursorTreeAdapter;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,10 +16,13 @@ public class Post {
     public String content;
     public String mediaUrl;
     public String mediaType;
-    /*public Timestamp timestamp;*/
+    public Date currentTime;
     public Map<String, Boolean> likes = new HashMap<>();
+
     // Constructor vacio requerido por Firestore
-    public Post() {}
+    public Post() {
+    }
+
     public Post(String uid, String author, String authorPhotoUrl, String
             content, String mediaUrl, String mediaType) {
         this.uid = uid;
@@ -27,7 +31,6 @@ public class Post {
         this.content = content;
         this.mediaUrl = mediaUrl;
         this.mediaType = mediaType;
-       /* Long datetime = System.currentTimeMillis();
-        this.timestamp=new Timestamp(datetime);*/
+        this.currentTime = Calendar.getInstance().getTime();
     }
 }

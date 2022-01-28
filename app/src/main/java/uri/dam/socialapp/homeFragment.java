@@ -119,17 +119,13 @@ public class homeFragment extends Fragment {
 
 
             holder.authorPhotoImageView.setOnClickListener(new View.OnClickListener() {
-                boolean isImageFitToScreen = false;
+                boolean isOpen = false;
 
                 @Override
                 public void onClick(View v) {
-                    if(isImageFitToScreen) {
-                        isImageFitToScreen =false;
-/*
-                        holder.authorPhotoImageView.jumpDrawablesToCurrentState();
-*/
-                        holder.authorPhotoImageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                        holder.authorPhotoImageView.setAdjustViewBounds(true);
+                    if(isOpen) {
+                        isOpen =false;
+                        navController.navigate();
                     }else{
                         isImageFitToScreen =true;
                         holder.authorPhotoImageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));

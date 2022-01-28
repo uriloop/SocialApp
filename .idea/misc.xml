@@ -10,9 +10,10 @@
         <entry key="app/src/main/res/layout/fragment_new_post.xml" value="0.2" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_register.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_sign_in.xml" value="0.23064770932069512" />
+        <entry key="app/src/main/res/layout/fragment_sign_in.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_sign_out.xml" value="0.33695652173913043" />
         <entry key="app/src/main/res/layout/nav_header_main.xml" value="0.34193840579710144" />
+        <entry key="app/src/main/res/layout/profile_zoom.xml" value="0.33" />
         <entry key="app/src/main/res/layout/viewholder_post.xml" value="0.33" />
         <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.32108843537414966" />
         <entry key="app/src/main/res/menu/main.xml" value="0.1" />

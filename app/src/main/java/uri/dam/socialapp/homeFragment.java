@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -41,6 +42,7 @@ public class homeFragment extends Fragment {
 
     NavController navController;
     public AppViewModel appViewModel;
+    SearchView searchView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,8 +57,8 @@ public class homeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-
-
+        searchView=view.findViewById(R.id.search);
+        searchView.setIconified(false);
 
         navController = Navigation.findNavController(view);  // <-----------------
         view.findViewById(R.id.gotoNewPostFragmentButton).setOnClickListener(new View.OnClickListener() {
@@ -68,6 +70,24 @@ public class homeFragment extends Fragment {
 
 
         RecyclerView postsRecyclerView = view.findViewById(R.id.postsRecyclerView);
+
+        // cambiar. no es on click, és on change text   Mirar la practica
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               /* Query query = FirebaseFirestore.getInstance().collection("posts").limit(50).whereEqualTo("name",v.findViewById(R.id.search).);
+
+                FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
+                        .setQuery(query, Post.class)
+                        .setLifecycleOwner(this)
+                        .build();
+
+                postsRecyclerView.setAdapter(new PostsAdapter(options));
+
+                appViewModel = new
+                        ViewModelProvider(requireActivity()).get(AppViewModel.class);*/
+            }
+        });
 
         Query query = FirebaseFirestore.getInstance().collection("posts").limit(50).orderBy("currentTime",Query.Direction.DESCENDING);
 
@@ -119,20 +139,11 @@ public class homeFragment extends Fragment {
 
 
             holder.authorPhotoImageView.setOnClickListener(new View.OnClickListener() {
-                boolean isOpen = false;
-
                 @Override
                 public void onClick(View v) {
-                    if(isOpen) {
-                        isOpen =false;
-                        navController.navigate();
-                    }else{
-                        isImageFitToScreen =true;
-                        holder.authorPhotoImageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                        holder.authorPhotoImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                        holder.authorPhotoImageView.setMaxHeight(500);
 
-                    }
+
+                    navController.navigate(R.id.userProfileFragment);
                 }
             });
 

@@ -87,7 +87,9 @@ public class registerFragment extends Fragment {
 
         registerButton.setEnabled(false);
 
+
         mAuth.createUserWithEmailAndPassword(emailEditText.getText().toString(), passwordEditText.getText().toString())
+
                 .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {

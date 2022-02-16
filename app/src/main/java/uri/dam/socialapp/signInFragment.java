@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -23,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -56,6 +58,15 @@ public class signInFragment extends Fragment {
 
         navController = Navigation.findNavController(view);  // <-----------------
 
+
+        TextView recuperaPassword = view.findViewById(R.id.googleRecuperaPass);
+
+        recuperaPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recuperarContrasenaGoogle();
+            }
+        });
 
         view.findViewById(R.id.gotoCreateAccountTextView).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +117,22 @@ public class signInFragment extends Fragment {
         });
     }
 
+    private void recuperarContrasenaGoogle() {
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+
+        user.sendEmailVerification()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            /*Log.d(TAG, "Email sent.");*/
+                        }
+                    }
+                });
+    }
+
     private void accederConGoogle() {
         GoogleSignInClient googleSignInClient =
                 GoogleSignIn.getClient(requireActivity(), new
@@ -113,12 +140,13 @@ public class signInFragment extends Fragment {
                         .requestIdToken(getString(R.string.default_web_client_id))
                         .requestEmail()
                         .build());
+
         activityResultLauncher.launch(googleSignInClient.getSignInIntent());
     }
 
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        if(acct == null) return;
+        if (acct == null) return;
         signInProgressBar.setVisibility(View.VISIBLE);
         signInForm.setVisibility(View.GONE);
         mAuth.signInWithCredential(GoogleAuthProvider.getCredential(acct.getIdToken(

@@ -57,8 +57,8 @@ public class homeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        searchView=view.findViewById(R.id.search);
-        searchView.setIconified(false);
+        /*searchView = view.findViewById(R.id.search);
+        searchView.setIconified(false);*/
 
         navController = Navigation.findNavController(view);  // <-----------------
         view.findViewById(R.id.gotoNewPostFragmentButton).setOnClickListener(new View.OnClickListener() {
@@ -68,31 +68,35 @@ public class homeFragment extends Fragment {
             }
         });
 
+        final boolean[] hihaquery = {false};
+        final Query[] query = {null};
+        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                hihaquery[0] =true;
+                System.out.println("hola");
+                query[0] = FirebaseFirestore.getInstance().collection("posts");
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                query[0] = FirebaseFirestore.getInstance().collection("posts");
+                hihaquery[0]=true;
+                System.out.println("hola");
+                return false;
+            }
+        });*/
+
 
         RecyclerView postsRecyclerView = view.findViewById(R.id.postsRecyclerView);
 
-        // cambiar. no es on click, és on change text   Mirar la practica
-        searchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               /* Query query = FirebaseFirestore.getInstance().collection("posts").limit(50).whereEqualTo("name",v.findViewById(R.id.search).);
 
-                FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
-                        .setQuery(query, Post.class)
-                        .setLifecycleOwner(this)
-                        .build();
+        query[0] = FirebaseFirestore.getInstance().collection("posts").limit(50).orderBy("currentTime", Query.Direction.DESCENDING);
 
-                postsRecyclerView.setAdapter(new PostsAdapter(options));
-
-                appViewModel = new
-                        ViewModelProvider(requireActivity()).get(AppViewModel.class);*/
-            }
-        });
-
-        Query query = FirebaseFirestore.getInstance().collection("posts").limit(50).orderBy("currentTime",Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
-                .setQuery(query, Post.class)
+                .setQuery(query[0], Post.class)
                 .setLifecycleOwner(this)
                 .build();
 
@@ -105,7 +109,9 @@ public class homeFragment extends Fragment {
     }
 
     class PostsAdapter extends FirestoreRecyclerAdapter<Post, PostsAdapter.PostViewHolder> {
-        public PostsAdapter(@NonNull FirestoreRecyclerOptions<Post> options) {super(options);}
+        public PostsAdapter(@NonNull FirestoreRecyclerOptions<Post> options) {
+            super(options);
+        }
 
         @NonNull
         @Override
@@ -119,12 +125,12 @@ public class homeFragment extends Fragment {
             holder.authorTextView.setText(post.author);
             holder.contentTextView.setText(post.content);
 
-            String currentDateAndTime= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(post.currentTime);
+            String currentDateAndTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(post.currentTime);
             holder.dateTextView.setText(currentDateAndTime);
             // Gestion de likes
             final String postKey = getSnapshots().getSnapshot(position).getId();
             final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            if(post.likes.containsKey(uid))
+            if (post.likes.containsKey(uid))
                 holder.likeImageView.setImageResource(R.drawable.like_on);
             else
                 holder.likeImageView.setImageResource(R.drawable.like_off);
@@ -132,18 +138,17 @@ public class homeFragment extends Fragment {
             holder.likeImageView.setOnClickListener(view -> {
                 FirebaseFirestore.getInstance().collection("posts")
                         .document(postKey)
-                        .update("likes."+uid, post.likes.containsKey(uid) ?
+                        .update("likes." + uid, post.likes.containsKey(uid) ?
                                 FieldValue.delete() : true);
             });
 
-
-
+            // que fa aixó?
             holder.authorPhotoImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-
                     navController.navigate(R.id.userProfileFragment);
+
                 }
             });
 
@@ -165,8 +170,8 @@ public class homeFragment extends Fragment {
         }
 
         class PostViewHolder extends RecyclerView.ViewHolder {
-            ImageView authorPhotoImageView,likeImageView,mediaImageView;
-            TextView authorTextView, contentTextView,numLikesTextView, dateTextView;
+            ImageView authorPhotoImageView, likeImageView, mediaImageView;
+            TextView authorTextView, contentTextView, numLikesTextView, dateTextView;
 
             PostViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -176,7 +181,7 @@ public class homeFragment extends Fragment {
                 authorTextView = itemView.findViewById(R.id.authorTextView);
                 contentTextView = itemView.findViewById(R.id.contentTextView);
                 numLikesTextView = itemView.findViewById(R.id.numLikesTextView);
-                dateTextView= itemView.findViewById(R.id.date);
+                dateTextView = itemView.findViewById(R.id.date);
 
             }
         }

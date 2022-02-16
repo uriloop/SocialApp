@@ -6,22 +6,43 @@
     tools:context=".registerFragment"
     android:orientation="vertical">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="8"
+        android:layout_marginHorizontal="20dp"
+        android:src="@drawable/logo" />
     <EditText
         android:id="@+id/emailEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"/>
+        android:layout_marginHorizontal="20dp"
+        android:hint="Email"
+        android:layout_weight="1"
+        />
 
     <EditText
         android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"/>
+        android:layout_marginHorizontal="20dp"
+        android:hint="Password"
+        android:layout_weight="1"
+        />
 
     <Button
         android:id="@+id/registerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create account"/>
+        android:layout_marginHorizontal="20dp"
+        android:text="Create account"
+        android:layout_weight="1"
+        />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="6"
+        />
+
 
 </LinearLayout>

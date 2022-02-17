@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -142,12 +143,14 @@ public class homeFragment extends Fragment {
                                 FieldValue.delete() : true);
             });
 
-            // que fa aixó?
+
             holder.authorPhotoImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    navController.navigate(R.id.userProfileFragment);
+
+
+
 
                 }
             });
@@ -186,6 +189,7 @@ public class homeFragment extends Fragment {
             }
         }
     }
+
 
 
 }

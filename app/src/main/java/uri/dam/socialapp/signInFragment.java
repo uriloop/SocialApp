@@ -2,6 +2,7 @@ package uri.dam.socialapp;
 
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -20,6 +22,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -38,6 +41,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import java.time.Duration;
 
 public class signInFragment extends Fragment {
 
@@ -62,9 +67,32 @@ public class signInFragment extends Fragment {
         TextView recuperaPassword = view.findViewById(R.id.googleRecuperaPass);
 
         recuperaPassword.setOnClickListener(new View.OnClickListener() {
+            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+
             @Override
             public void onClick(View view) {
-                recuperarContrasenaGoogle();
+                alert.setTitle("Recuperar contrassenya");
+                alert.setMessage("Introdueix el teu email");
+
+// Set an EditText view to get user input
+                final EditText input = new EditText(getContext());
+                alert.setView(input);
+
+                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        recuperarContrasenaGoogle(input);
+                    }
+                });
+
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // Canceled.
+                    }
+                });
+
+                alert.show();
+
             }
         });
 
@@ -117,20 +145,25 @@ public class signInFragment extends Fragment {
         });
     }
 
-    private void recuperarContrasenaGoogle() {
+    private void recuperarContrasenaGoogle(EditText input) {
+
+        String mail=input.getText().toString();
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
 
-        user.sendEmailVerification()
+        Toast toast=Toast.makeText(this.getContext(),"S'ha enviat un email a la direcció: "+mail, Toast.LENGTH_LONG);
+
+        auth.sendPasswordResetEmail(mail)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            /*Log.d(TAG, "Email sent.");*/
+                           toast.show();
                         }
                     }
                 });
+
     }
 
     private void accederConGoogle() {

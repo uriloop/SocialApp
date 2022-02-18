@@ -18,11 +18,14 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import uri.dam.socialapp.databinding.FragmentProfileBinding;
+
 
 public class ProfileFragment extends Fragment {
 
     ImageView photoImageView;
     TextView displayNameTextView, emailTextView;
+    FragmentProfileBinding binding;
 
     public ProfileFragment() {}
 
@@ -41,6 +44,13 @@ public class ProfileFragment extends Fragment {
         emailTextView = view.findViewById(R.id.emailTextView);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        binding.editarProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String hola= "hola";
+            }
+        });
 
 
         if(user != null){

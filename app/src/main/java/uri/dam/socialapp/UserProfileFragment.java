@@ -16,16 +16,22 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import uri.dam.socialapp.databinding.FragmentUserProfileBinding;
+
 
 public class UserProfileFragment extends Fragment {
 
     ImageView userImage;
     TextView userName, userEmail;
+    FragmentUserProfileBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        binding= FragmentUserProfileBinding.inflate(getLayoutInflater());
+
 
         return inflater.inflate(R.layout.fragment_user_profile, container, false);
     }
@@ -34,10 +40,13 @@ public class UserProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        userImage = view.findViewById(R.id.userImage);
-        userName = view.findViewById(R.id.userName);
-        userEmail = view.findViewById(R.id.userEmail);
 
+        binding.desar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
        
 
 

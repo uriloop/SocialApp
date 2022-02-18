@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Matrix;
 import android.os.Bundle;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
@@ -13,6 +14,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,32 +71,14 @@ public class homeFragment extends Fragment {
             }
         });
 
+
         final boolean[] hihaquery = {false};
         final Query[] query = {null};
-        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                hihaquery[0] =true;
-                System.out.println("hola");
-                query[0] = FirebaseFirestore.getInstance().collection("posts");
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                query[0] = FirebaseFirestore.getInstance().collection("posts");
-                hihaquery[0]=true;
-                System.out.println("hola");
-                return false;
-            }
-        });*/
 
 
         RecyclerView postsRecyclerView = view.findViewById(R.id.postsRecyclerView);
 
-
         query[0] = FirebaseFirestore.getInstance().collection("posts").limit(50).orderBy("currentTime", Query.Direction.DESCENDING);
-
 
         FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
                 .setQuery(query[0], Post.class)
@@ -105,7 +89,6 @@ public class homeFragment extends Fragment {
 
         appViewModel = new
                 ViewModelProvider(requireActivity()).get(AppViewModel.class);
-
 
     }
 
@@ -122,8 +105,22 @@ public class homeFragment extends Fragment {
 
         @Override
         protected void onBindViewHolder(@NonNull PostViewHolder holder, int position, @NonNull final Post post) {
-            Glide.with(getContext()).load(post.authorPhotoUrl).circleCrop().into(holder.authorPhotoImageView);
-            holder.authorTextView.setText(post.author);
+
+            int photo;
+            if (!post.authorPhotoUrl.equals("")) {
+/*
+                post.authorPhotoUrl="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.emmegi.co.uk%2Fcontact-emmegi-for-air-blast-oil-coolers%2Fuser-icon%2F&psig=AOvVaw2fyyUttZ99AkucX72Qb15O&ust=1645284021696000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCPDDo-HGifYCFQAAAAAdAAAAABAc";
+*/
+/*
+                Glide.with(getContext()).load("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.emmegi.co.uk%2Fcontact-emmegi-for-air-blast-oil-coolers%2Fuser-icon%2F&psig=AOvVaw2fyyUttZ99AkucX72Qb15O&ust=1645284021696000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCPDDo-HGifYCFQAAAAAdAAAAABAc").circleCrop().into(holder.authorPhotoImageView);
+*/
+                Glide.with(getContext()).load(post.authorPhotoUrl).circleCrop().into(holder.authorPhotoImageView);
+
+            }
+String text= post.author;
+            if (TextUtils.isEmpty(text)) text= "Unknow user";
+
+            holder.authorTextView.setText(text);
             holder.contentTextView.setText(post.content);
 
             String currentDateAndTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(post.currentTime);
@@ -147,9 +144,6 @@ public class homeFragment extends Fragment {
             holder.authorPhotoImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
-
 
 
                 }
@@ -189,7 +183,6 @@ public class homeFragment extends Fragment {
             }
         }
     }
-
 
 
 }

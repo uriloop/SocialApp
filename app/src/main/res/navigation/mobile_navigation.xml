@@ -44,4 +44,30 @@
         android:name="uri.dam.socialapp.UserProfileFragment"
         android:label="fragment_user_profile"
         tools:layout="@layout/fragment_user_profile" />
+    <fragment
+        android:id="@+id/homeDate"
+        android:name="uri.dam.socialapp.homeDateFragment"
+        android:label="fragment_home_byDate"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/homeLikes"
+        android:name="uri.dam.socialapp.homeLikesFragment"
+        android:label="fragment_home_byLikes"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/homeImages"
+        android:name="uri.dam.socialapp.homeImagesFragment"
+        android:label="fragment_home_Images"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/homeVideos"
+        android:name="uri.dam.socialapp.homeVideoFragment"
+        android:label="fragment_home_Videos"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/homeAudios"
+        android:name="uri.dam.socialapp.homeAudioFragment"
+        android:label="fragment_home_Audios"
+        tools:layout="@layout/fragment_home" />
+
 </navigation>

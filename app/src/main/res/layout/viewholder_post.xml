@@ -5,6 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     app:cardUseCompatPadding="true"
+    android:elevation="10dp"
+    android:outlineAmbientShadowColor="@color/teal_200"
     >
 
     <LinearLayout
@@ -13,7 +15,7 @@
         android:layout_gravity="center_horizontal"
         android:orientation="vertical"
         android:padding="10dp"
-        android:background="@color/purple_200">
+        >
 
         <LinearLayout
             android:layout_width="match_parent"

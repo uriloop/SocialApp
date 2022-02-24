@@ -72,16 +72,58 @@ public class homeFragment extends Fragment {
         });
 
 
+
         final boolean[] hihaquery = {false};
         final Query[] query = {null};
 
 
         RecyclerView postsRecyclerView = view.findViewById(R.id.postsRecyclerView);
 
-        query[0] = FirebaseFirestore.getInstance().collection("posts").limit(50).orderBy("currentTime", Query.Direction.DESCENDING);
+        view.findViewById(R.id.likes_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                navController.navigate(R.id.homeLikes);
+
+            }
+        });
+
+        view.findViewById(R.id.images_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                navController.navigate(R.id.homeImages);
+
+            }
+        });
+        view.findViewById(R.id.video_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                navController.navigate(R.id.homeVideos);
+
+            }
+        });
+        view.findViewById(R.id.audio_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                navController.navigate(R.id.homeAudios);
+
+            }
+        });
+        view.findViewById(R.id.date_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                navController.navigate(R.id.homeDate);
+
+            }
+        });
+
 
         FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
-                .setQuery(query[0], Post.class)
+                .setQuery(getQuery(), Post.class)
                 .setLifecycleOwner(this)
                 .build();
 
@@ -90,6 +132,11 @@ public class homeFragment extends Fragment {
         appViewModel = new
                 ViewModelProvider(requireActivity()).get(AppViewModel.class);
 
+    }
+
+    Query getQuery()
+    {
+        return FirebaseFirestore.getInstance().collection("posts").limit(50);
     }
 
     class PostsAdapter extends FirestoreRecyclerAdapter<Post, PostsAdapter.PostViewHolder> {
@@ -183,6 +230,7 @@ String text= post.author;
             }
         }
     }
+
 
 
 }
